@@ -1,11 +1,5 @@
 import React from "react";
 
-type SetTodoItemType = {
-    title: string,
-    date: string,
-    notes: string
-}
-
 type SetTitleAction = {
     type: "SET_TITLE";
     payload: string,
@@ -22,7 +16,11 @@ type SetNotesAction = {
 }
 
 type TodoItemAction = SetTitleAction | SetDateAction | SetNotesAction;
-
+/**
+ * 
+ * @param title 
+ * @param dispatch 
+ */
 export const handleTitle = (
     title: string,
     dispatch: React.Dispatch<TodoItemAction>
@@ -34,7 +32,11 @@ export const handleTitle = (
         }
     );
 }
-
+/**
+ * 
+ * @param date 
+ * @param dispatch 
+ */
 export const handleDate = (
     date: string,
     dispatch: React.Dispatch<TodoItemAction>
@@ -46,7 +48,11 @@ export const handleDate = (
         }
     );
 }
-
+/**
+ * 
+ * @param notes 
+ * @param dispatch 
+ */
 export const handleNotes = (
     notes: string,
     dispatch: React.Dispatch<TodoItemAction>

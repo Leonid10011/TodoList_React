@@ -1,5 +1,12 @@
 import { SetTodoItemType, TodoItemAction } from "../types/types";
 
+/**
+ * 
+ * @param state 
+ * @param action 
+ * @returns 
+ * @description Set title/date/notes of the todo item
+ */
 export const reducer = (state: SetTodoItemType, action: TodoItemAction) => {
     switch(action.type) {
         case "SET_TITLE":

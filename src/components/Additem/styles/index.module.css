@@ -1,25 +1,10 @@
-@import url('https://unpkg.com/css.gg@2.0.0/icons/css/close.css');
-
-.setDateButton {
-    border: 2px solid black;
-    width: 100px;
-    height: 20px;
-    margin: 5px 0px;
-}
-
-.setDateButton:hover {
-    background-color: aquamarine;
-    box-shadow: 4px 2px 2px red;
-    cursor: pointer;
-}
-
 .header {
     margin: 10px 0;
     display: flex;
     justify-content: center;
 }
 
-.left {
+.container {
     color: antiquewhite;
     background: rgb(220,220,232);
     background: linear-gradient(338deg, rgba(220,220,232,1) 0%, rgba(105,168,180,1) 0%, rgba(220,220,232,1) 0%, rgba(220,224,232,1) 0%, rgba(2,0,36,1) 61%); 
@@ -54,8 +39,15 @@
     position: relative;
     padding: 0px 10px;
     margin: 0px 10px;
-    width: 100px;
+    width: 200px;
     height: 30px;
+}
+
+.inputTextArea {
+    display: inline-block;
+    position: relative;
+    padding: 0px 10px;
+    margin: 0px 10px;
 }
 
 .inputWithLabel {
@@ -73,7 +65,7 @@
     justify-content: end;
 }
 
-.submit_btn {
+.btn_submit {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -81,7 +73,7 @@
     padding-top: 30px;
 }
 
-.submit_btn > button {
+.btn_submit > button {
     width: 70%;
 }
 /* Close Button*/

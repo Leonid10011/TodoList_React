@@ -1,5 +1,3 @@
-import { MouseEventHandler } from "react";
-
 export type TodoItemType = {
     id: string,
     title: string,

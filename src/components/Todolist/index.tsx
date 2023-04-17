@@ -1,5 +1,5 @@
 import React, { Ref, forwardRef } from "react";
-import styles from "./style.module.css";
+import styles from "./styles/style.module.css";
 import { TodoItemProps, TodoListProps } from "./types/types";
 import { updateTodoItem } from "../../databaseController/controller";
 
@@ -17,15 +17,15 @@ export const TodoList = forwardRef( function TodoList({ items, handleDelete }: T
     )
 } )
 /**
- * TODO: add linebreak to long words ( wont lienbreak themseleves!)
  * @param param0 
  * @returns 
+ * @todo add linebreak to long words ( wont lienbreak themseleves!)
  */
 function TodoItem({ item, handleDelete }: TodoItemProps) {
     const [checked, setChecked] = React.useState(item.checked);
-
-    let a = styles.listItem;
-    let b = styles.listItemDisabled;
+    // change appearance of TodoItem when checked
+    let activeItem = styles.listItem;
+    let inactiveItem = styles.listItemDisabled;
     
     const handleChecked = () => {
         setChecked(!checked);
@@ -33,7 +33,7 @@ function TodoItem({ item, handleDelete }: TodoItemProps) {
     } 
 
     return(
-        <li key={item.id} className={!checked ? a : b}>
+        <li key={item.id} className={!checked ? activeItem : inactiveItem}>
             <div className={styles.itemTop}>
                 <div className={styles.itemTitle}>
                     <span>{item.title}</span>
