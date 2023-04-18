@@ -46,6 +46,18 @@
     }
 }
 
+.listItem:hover {
+    animation: bubble .5s;
+}
+
+@keyframes bubble {
+    0%, 100% {
+        scale: 1;
+    }
+    50% {
+        scale: 1.02;
+    }
+}
 
 .itemTop {
     display: flex;

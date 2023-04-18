@@ -1,14 +1,12 @@
 import { db } from "../lib/firestore";
 import { addDoc, getDocs, collection, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { TodoItemType } from "../components/Todolist/types/types";
-
-type SetTodoItemType = {
-    title: string,
-    date: string,
-    notes: string,
-    checked: boolean,
-}
-
+import { SetTodoItemType } from "../components/Additem/types/types";
+/**
+ * 
+ * @param item 
+ * @returns 
+ */
 export async function addTodoItem (item: SetTodoItemType): Promise<string> {
     try {
         if((typeof(item.title) === "string" && item.title !== "")
@@ -33,7 +31,10 @@ export async function addTodoItem (item: SetTodoItemType): Promise<string> {
         return "";
     }
 }
-
+/**
+ * 
+ * @returns Promise for todoItems
+ */
 export async function getTodoItems (): Promise<TodoItemType[]> {
     const querySnapshot = await getDocs(collection(db, "TodoItems"));
     let result = querySnapshot.docs.map(
@@ -45,7 +46,10 @@ export async function getTodoItems (): Promise<TodoItemType[]> {
     console.log("Successfully get data.")
     return result
 }
-
+/**
+ * 
+ * @param item 
+ */
 export async function updateTodoItem (item: TodoItemType) {
     try {
         const todoRef = doc(db, "TodoItems", item.id);
@@ -59,7 +63,10 @@ export async function updateTodoItem (item: TodoItemType) {
         console.error("Failed to update Item.", error);
     }
 }
-
+/**
+ * 
+ * @param item 
+ */
 export async function deleteTodoItem ( item: TodoItemType) {
     try{
         await deleteDoc(doc(db, "TodoItems", item.id));

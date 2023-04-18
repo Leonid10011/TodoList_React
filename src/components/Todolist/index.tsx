@@ -1,4 +1,4 @@
-import React, { Ref, forwardRef } from "react";
+import React, { Ref, forwardRef, useEffect } from "react";
 import styles from "./styles/style.module.css";
 import { TodoItemProps, TodoListProps } from "./types/types";
 import { updateTodoItem } from "../../databaseController/controller";
@@ -8,32 +8,30 @@ export const TodoList = forwardRef( function TodoList({ items, handleDelete }: T
     return(
         <div id={styles.main} ref={ref}>
             <ul>
-            {items.map( 
-                    item => <TodoItem key={item.id} item={item} handleDelete={handleDelete}/> 
-                )
-            }
+                {items.map(item => <TodoItem key={item.id} item={item} handleDelete={handleDelete}/> )}
             </ul>
         </div>
     )
 } )
 /**
- * @param param0 
+ * @param param
  * @returns 
- * @todo add linebreak to long words ( wont lienbreak themseleves!)
+ * @todo add linebreak to long words ( wont linebreak themseleves!)
  */
-function TodoItem({ item, handleDelete }: TodoItemProps) {
+const TodoItem = (function TodoItem({ item, handleDelete }: TodoItemProps) {
     const [checked, setChecked] = React.useState(item.checked);
     // change appearance of TodoItem when checked
     let activeItem = styles.listItem;
     let inactiveItem = styles.listItemDisabled;
-    
+
     const handleChecked = () => {
         setChecked(!checked);
+        // update the check attribute of item in database
         updateTodoItem({...item, checked: !checked});
     } 
 
     return(
-        <li key={item.id} className={!checked ? activeItem : inactiveItem}>
+        <li key={item.id} className={!checked ? activeItem : inactiveItem} id={item.id}>
             <div className={styles.itemTop}>
                 <div className={styles.itemTitle}>
                     <span>{item.title}</span>
@@ -52,6 +50,6 @@ function TodoItem({ item, handleDelete }: TodoItemProps) {
                     <input type={"checkbox"} onChange={handleChecked} checked={checked}/>
                 </div>
             </div>
-        </li>
+        </li> 
     )
-}
+});

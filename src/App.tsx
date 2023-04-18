@@ -7,28 +7,22 @@ import { AddItem } from "./components/Additem";
 import { deleteTodoItem } from "./databaseController/controller";
 
 function App() {
- 
+  // get refs for both main children to controller the sidebar slide
   const AddItemRef = React.useRef<HTMLDivElement>(null);
   const TodoListRef = React.useRef<HTMLDivElement>(null);
 
   const [todoItems, setTodoItems] = React.useState<TodoItemType[]>(new Array);
 
   React.useEffect(() => {
-    var now: Date = new Date();
-    var fullDaysSinceEpoch = Math.floor(now.getTime()/8.64e7);
-    console.log(fullDaysSinceEpoch);
     const waitItems = async() => {
       let res = await getTodoItems();
       setTodoItems(res);
-      if(TodoListRef.current){
-        console.log(TodoListRef.current.children[1].children[0].children);
-      }
     }
     waitItems();
   }, [])
 
   React.useEffect(() => {
-    // Rerender if an item is added though child component
+    // Rerender if an item is added
   },[todoItems]);
 
   const handleDelete = (item : TodoItemType) => {
@@ -39,24 +33,27 @@ function App() {
     setTodoItems([...newTodos]);
   } 
 
+  /**
+   *  Open sidebar
+   */
   function openAddItem() {
     if(AddItemRef.current && TodoListRef.current){
-      AddItemRef.current.style.width = "400px";
-      AddItemRef.current.style.paddingLeft = "30px";
-      TodoListRef.current.style.marginLeft = "400px";
+      AddItemRef.current.style.width = "100%";
+      TodoListRef.current.style.marginLeft = "100%";
     }
   }
-
+  /**
+   * Close sidebar
+   */
   function closeAddItem() {
     if(TodoListRef.current && AddItemRef.current) {
       AddItemRef.current.style.width = "0";
-      AddItemRef.current.style.paddingLeft = "0";
       TodoListRef.current.style.marginLeft = "0";
     }
   }
 
   return(
-    <React.StrictMode>
+
       <>
         <AddItem close={closeAddItem} handleSetTodos={setTodoItems} todos={todoItems} ref={AddItemRef}/>
         <div id={styles.main} ref={TodoListRef}>
@@ -67,7 +64,7 @@ function App() {
           <TodoList items={todoItems} handleDelete={handleDelete}/>
         </div>
       </>
-    </React.StrictMode> 
+
   )
 }
 
