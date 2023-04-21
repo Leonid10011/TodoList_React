@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import * as CREDS from "./config";
+import * as CREDS from "../../config";
 
 const firebaseConfig = {
 

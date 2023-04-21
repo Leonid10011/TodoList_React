@@ -1,10 +1,16 @@
-import React, { Ref, forwardRef } from "react";
+import React, { Ref, forwardRef, ComponentType, FC } from "react";
 import { reducer } from "./reducer/reducer";
+
 import { InputWithLabelProps, AddItemFormProps } from "./types/types";
 import { TodoItemType } from "../Todolist/types/types";
+
 import * as handler from "./functions/handleInputs";
+
 import styles from "./styles/index.module.css";
+
 import { addTodoItem } from "../../databaseController/controller";
+
+import { withInputandLabel } from "./withInputandLablel";
 
 export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todos } : {
     close: () => void,
@@ -58,9 +64,9 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
 
     return(
         <form onSubmit={handleOnSubmit} className={styles.addForm}>
-            <InputWithLabel  type={"text"} name={"Title"} id={"1"} value={itemToAdd.title} dispatchItem={dispatch} handleInput={handler.handleTitle} />
-            <InputWithLabel  type={"text"} name={"Date"} id={"2"} value={itemToAdd.date} dispatchItem={dispatch} handleInput={handler.handleDate} />
-            <InputWithLabel  type={"text"} name={"Notes"} id={"3"} value={itemToAdd.notes} dispatchItem={dispatch} handleInput={handler.handleNotes} />
+            <Input  type={"text"} name={"Title"} id={"1"} value={itemToAdd.title} dispatchItem={dispatch} handleInput={handler.handleTitle} />
+            <Input  type={"text"} name={"Date"} id={"2"} value={itemToAdd.date} dispatchItem={dispatch} handleInput={handler.handleDate} />
+            <TextArea  type={"text"} name={"Notes"} id={"3"} value={itemToAdd.notes} dispatchItem={dispatch} handleInput={handler.handleNotes} />
             <div className={styles.btn_submit}>
                 <button type="submit" >Submit</button>
             </div>
@@ -68,55 +74,45 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
     )
 }
 
-function InputWithLabel(
-    { 
-        name,
-        id,
-        value,
-        type,
-        dispatchItem,
-        handleInput,
-     } : InputWithLabelProps  
-) {
+const TextArea = withInputandLabel(
+    (
+        props: InputWithLabelProps, 
+    ) => {
+        const handleOnChangeArea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            props.handleInput(event.target.value, props.dispatchItem);
+        }
 
-    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        handleInput(event.target.value, dispatchItem);
-    }
-
-    const handleOnChangeArea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        handleInput(event.target.value, dispatchItem);
-    }
-
-    React.useEffect(() => {
-        if(name === "Date")
-            dispatchItem({
-                type: "SET_DATE",
-                payload: (new Date()).toDateString(),
-            });
-    }, [])
-
-    return(
-        <div className={styles.inputWithLabel} id={styles.sidebar}>
-            <label htmlFor={id} className={styles.itemLabel}>{name}</label>
-            { name === "Notes" ? 
+        return(
             <textarea 
                 name="Text1" 
                 cols={35} 
                 rows={8}
                 className={styles.itemTextArea} 
-                id={id}
-                value={value}
+                id={props.id}
+                value={props.value}
                 onChange={handleOnChangeArea}
-                
-                ></textarea> 
-            : <input
+            ></textarea> 
+        )
+    }
+    )
+
+const Input = withInputandLabel(
+    (
+        props: InputWithLabelProps
+    ) => {
+        const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            props.handleInput(event.target.value, props.dispatchItem);
+        }
+
+        return (
+            <input
                 className={styles.itemInput} 
-                type={type}
-                id={id}
-                value={value}
+                type={props.type}
+                id={props.id}
+                value={props.value}
                 onChange={handleOnChange} 
                 maxLength={28}
-            />}
-        </div>
-    )
-}
+            />
+        )
+    }
+)

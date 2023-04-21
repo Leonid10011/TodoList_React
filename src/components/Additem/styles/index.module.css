@@ -14,9 +14,8 @@
     border-radius: 15px;
     height: 100%;
     z-index: 1; /* stay on top layer*/
-    top: 0;
+    top: 0px;
     left: -20px;
-    padding-left: 0;
     overflow-x: hidden; /* disable horizontal scroll*/
     transition: 0.5s;
     width: 0;
