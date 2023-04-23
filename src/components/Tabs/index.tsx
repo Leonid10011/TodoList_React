@@ -22,6 +22,17 @@ function Tabs(props: TabsProps) {
         return(categories.map(() => React.createRef<HTMLButtonElement>()))
     },[categories]);
 
+    React.useEffect(() => {
+        if(buttonRefs[0].current)
+            buttonRefs[0].current.className += " active";
+        childRefs.forEach( ref => {
+            if(ref.current)
+                ref.current.style.display = "none";
+        });
+        if(childRefs[0].current)
+            childRefs[0].current.style.display = "block";
+    }, []);
+
     const openCategory = (event: React.MouseEvent) => {
         let tabName = (event.target as HTMLButtonElement).name;
         // hide all todolists
@@ -50,8 +61,8 @@ function Tabs(props: TabsProps) {
                     ))}
             </div>
             <div>
-                <TodoList key={"te"} {...props} _id="main" ref={childRefs[0]}/>
-                <TodoList key={"t"} {...props} _id="sec"  ref={childRefs[1]}/>
+                <TodoList key={"te"} {...props} _id="main" category={categories[0]} ref={childRefs[0]}/>
+                <TodoList key={"t"} {...props} _id="sec" category={categories[1]} ref={childRefs[1]}/>
             </div>
         </>
     )

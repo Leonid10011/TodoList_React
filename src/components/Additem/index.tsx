@@ -25,6 +25,7 @@ export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todo
         date: "",
         notes: "",
         checked: false,
+        category: "",
     })
 
     return(
@@ -50,6 +51,7 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
             date: itemToAdd.date,
             notes: itemToAdd.notes,
             checked: itemToAdd.checked,
+            category: itemToAdd.category
         }
         // retrieve id to add todo with its new id to State in App component to avoid a fetch for this item  
         const updateTodoItemsState = async () => {

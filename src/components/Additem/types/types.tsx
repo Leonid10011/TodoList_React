@@ -5,6 +5,7 @@ export type SetTodoItemType = {
     date: string,
     notes: string,
     checked: boolean,
+    category: string,
 }
 
 type SetTitleAction = {

@@ -4,12 +4,14 @@ export type TodoItemType = {
     date: string,
     notes: string,
     checked: boolean,
+    category: string,
 }
 
 export type TodoListProps = {
     items: TodoItemType[],
     handleDelete: (item: TodoItemType) => void,
     _id: string,
+    category: string,
 }
 
 export type TodoItemProps = {

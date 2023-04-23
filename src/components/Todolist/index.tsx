@@ -3,14 +3,22 @@ import styles from "./styles/style.module.css";
 import { TodoItemProps, TodoListProps } from "./types/types";
 import { updateTodoItem } from "../../databaseController/controller";
 
-export const TodoList = forwardRef( function TodoList({ items, handleDelete, _id }: TodoListProps, ref: Ref<HTMLDivElement> ) {
+export const TodoList = forwardRef( function TodoList({ items, handleDelete, _id, category }: TodoListProps, ref: Ref<HTMLDivElement> ) {
 
     return(
         <div id={_id}>
             <div id={styles.main} ref={ref}>
                 <p>{_id}</p>
                 <ul>
-                    {items.map(item => <TodoItem key={item.id} item={item} handleDelete={handleDelete}/> )}
+                    {items.map(item => {
+                        if(item.category === category)
+                        return(
+                            <TodoItem key={item.id} item={item} handleDelete={handleDelete}/>
+                        )
+                        else    
+                            return
+                        } 
+                        )}
                 </ul>
             </div>
         </div>
