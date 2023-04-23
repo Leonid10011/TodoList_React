@@ -9,6 +9,7 @@ export type TodoItemType = {
 export type TodoListProps = {
     items: TodoItemType[],
     handleDelete: (item: TodoItemType) => void,
+    _id: string,
 }
 
 export type TodoItemProps = {

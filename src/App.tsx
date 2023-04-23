@@ -6,11 +6,12 @@ import { getTodoItems } from "./databaseController/controller";
 import { AddItem } from "./components/Additem";
 import { deleteTodoItem } from "./databaseController/controller";
 import * as ROUTES from "../config";
+import Tabs from "./components/Tabs";
 
 function App() {
   // get refs for both main children to controller the sidebar slide
   const AddItemRef = React.useRef<HTMLDivElement>(null);
-  const TodoListRef = React.useRef<HTMLDivElement>(null);
+  //const TodoListRef = React.useRef<HTMLDivElement>(null);
 
   const [todoItems, setTodoItems] = React.useState<TodoItemType[]>(new Array);
 
@@ -23,7 +24,7 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    // Rerender if an item is added
+  // Rerender if an item is added
   },[todoItems]);
 
   const handleDelete = (item : TodoItemType) => {
@@ -33,23 +34,23 @@ function App() {
     );
     setTodoItems([...newTodos]);
   } 
-
+  /**
+   * 
+   */
   /**
    *  Open sidebar
    */
   function openAddItem() {
-    if(AddItemRef.current && TodoListRef.current){
+    if(AddItemRef.current){
       AddItemRef.current.style.width = "100%";
-      TodoListRef.current.style.marginLeft = "100%";
     }
   }
   /**
    * Close sidebar
    */
   function closeAddItem() {
-    if(TodoListRef.current && AddItemRef.current) {
+    if(AddItemRef.current) {
       AddItemRef.current.style.width = "0";
-      TodoListRef.current.style.marginLeft = "0";
     }
   }
 
@@ -58,16 +59,17 @@ function App() {
       <>
         <AddItem close={closeAddItem} handleSetTodos={setTodoItems} todos={todoItems} ref={AddItemRef}/>
         <p>{ROUTES.default.VERSION}</p>
-        <div id={styles.main} ref={TodoListRef}>
+        <div id={styles.main}>
           <div className={styles.main_header}>
             <h1 className={styles.title}>Todo-List</h1>
             <button onClick={openAddItem} className={styles.main_header_btn}>Add</button>
           </div>
-          <TodoList items={todoItems} handleDelete={handleDelete}/>
+          <Tabs items={todoItems} handleDelete={handleDelete}/>
         </div>
       </>
 
   )
 }
 
+//<TodoList items={todoItems} handleDelete={handleDelete}/>
 export default App;
