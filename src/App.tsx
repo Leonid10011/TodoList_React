@@ -5,6 +5,7 @@ import { TodoItemType } from "./components/Todolist/types/types";
 import { getTodoItems } from "./databaseController/controller";
 import { AddItem } from "./components/Additem";
 import { deleteTodoItem } from "./databaseController/controller";
+import * as ROUTES from "../config";
 
 function App() {
   // get refs for both main children to controller the sidebar slide
@@ -56,6 +57,7 @@ function App() {
 
       <>
         <AddItem close={closeAddItem} handleSetTodos={setTodoItems} todos={todoItems} ref={AddItemRef}/>
+        <p>{ROUTES.default.VERSION}</p>
         <div id={styles.main} ref={TodoListRef}>
           <div className={styles.main_header}>
             <h1 className={styles.title}>Todo-List</h1>
