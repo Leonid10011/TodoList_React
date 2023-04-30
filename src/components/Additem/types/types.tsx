@@ -23,6 +23,11 @@ type SetNotesAction = {
     payload: string;
 }
 
+type SetCategoryAction = {
+    type: "SET_CATEGORY";
+    payload: string;
+}
+
 export type InputWithLabelProps = {
     name: string,
     id: string,
@@ -39,4 +44,4 @@ export type AddItemFormProps = {
     todos: TodoItemType[],
 }
 
-export type TodoItemAction = SetTitleAction | SetDateAction | SetNotesAction;
+export type TodoItemAction = SetTitleAction | SetDateAction | SetNotesAction | SetCategoryAction;

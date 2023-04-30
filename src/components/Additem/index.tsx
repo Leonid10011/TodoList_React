@@ -4,13 +4,20 @@ import { reducer } from "./reducer/reducer";
 import { InputWithLabelProps, AddItemFormProps } from "./types/types";
 import { TodoItemType } from "../Todolist/types/types";
 
+import  FirestoreController from "../../databaseController/controller";
+
 import * as handler from "./functions/handleInputs";
 
 import styles from "./styles/index.module.css";
 
-import { addTodoItem } from "../../databaseController/controller";
+//import { addTodoItem } from "../../databaseController/controller";
 
 import { withInputandLabel } from "./withInputandLablel";
+import { FirebaseContext } from "../Firebase";
+import { Firestore } from "firebase/firestore";
+import { CategoryContext } from "../Categories";
+
+const INITIAL_CATEGORIES = ["main","sec"];
 
 export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todos } : {
     close: () => void,
@@ -19,7 +26,7 @@ export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todo
     }, 
     ref: Ref<HTMLDivElement>
     ) {
-
+    
     const [itemToAdd, dispatch] = React.useReducer(reducer, {
         title: "",
         date: "",
@@ -44,6 +51,11 @@ export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todo
 })
 
 function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFormProps) {
+    const fire = React.useContext(FirebaseContext);
+    const categories = React.useContext(CategoryContext);
+    // Create new forestorecontroller to access db methods
+    const fc = new FirestoreController(fire)
+
     const handleOnSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         let toAdd = {
@@ -53,9 +65,12 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
             checked: itemToAdd.checked,
             category: itemToAdd.category
         }
+
+        
+
         // retrieve id to add todo with its new id to State in App component to avoid a fetch for this item  
         const updateTodoItemsState = async () => {
-            let id = await addTodoItem(toAdd);
+            let id = await fc.addTodoItem(toAdd);
             console.log(id);
             let newTodos = [...todos];
             newTodos.push({...toAdd, id: id});
@@ -63,15 +78,21 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
         }
         updateTodoItemsState();
     }
-
+    
     return(
         <form onSubmit={handleOnSubmit} className={styles.addForm}>
+            {categories.map(
+                category => 
+                    <p>{category}</p>
+            )}
+            <Input type={"text"} name={"Category"} id={"0"} value={itemToAdd.category} dispatchItem={dispatch} handleInput={handler.handleCategory}/>
             <Input  type={"text"} name={"Title"} id={"1"} value={itemToAdd.title} dispatchItem={dispatch} handleInput={handler.handleTitle} />
             <Input  type={"text"} name={"Date"} id={"2"} value={itemToAdd.date} dispatchItem={dispatch} handleInput={handler.handleDate} />
             <TextArea  type={"text"} name={"Notes"} id={"3"} value={itemToAdd.notes} dispatchItem={dispatch} handleInput={handler.handleNotes} />
             <div className={styles.btn_submit}>
                 <button type="submit" >Submit</button>
             </div>
+            
         </form>
     )
 }
@@ -96,7 +117,7 @@ const TextArea = withInputandLabel(
             ></textarea> 
         )
     }
-    )
+)
 
 const Input = withInputandLabel(
     (

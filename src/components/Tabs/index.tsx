@@ -1,5 +1,5 @@
 import React, { MouseEventHandler } from "react"
-import { TodoList } from "../Todolist";
+import TodoList from "../Todolist";
 import { TodoItemType } from "../Todolist/types/types";
 
 import styles from "./styles.module.css";
@@ -8,7 +8,7 @@ const INITIAL_CATEGORIES = ["main", "sec"]
 
 type TabsProps = {
     items: TodoItemType[],
-    handleDelete: (item: TodoItemType) => void
+    handleDelete: (item: TodoItemType) => void,
 }
 
 function Tabs(props: TabsProps) {

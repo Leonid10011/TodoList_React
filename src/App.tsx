@@ -1,23 +1,27 @@
 import React from "react";
 import styles from "./App.module.css";
-import { TodoList } from "./components/Todolist/index"
 import { TodoItemType } from "./components/Todolist/types/types";
-import { getTodoItems } from "./databaseController/controller";
 import { AddItem } from "./components/Additem";
-import { deleteTodoItem } from "./databaseController/controller";
 import * as ROUTES from "../config";
 import Tabs from "./components/Tabs";
+import { FirebaseContext } from "./components/Firebase";
+import TestComponent from "./components/TestComponent";
+import FirestoreController from "./databaseController/controller";
+import { CategoryContext } from "./components/Categories";
 
 function App() {
   // get refs for both main children to controller the sidebar slide
   const AddItemRef = React.useRef<HTMLDivElement>(null);
-  //const TodoListRef = React.useRef<HTMLDivElement>(null);
 
   const [todoItems, setTodoItems] = React.useState<TodoItemType[]>(new Array);
+  const [categories, setCategories] = React.useState<string[]>(["Main", "Sec"]);
+
+  const firebaseContext = React.useContext(FirebaseContext);
+  const fc = new FirestoreController(firebaseContext);
 
   React.useEffect(() => {
     const waitItems = async() => {
-      let res = await getTodoItems();
+      let res = await fc.getTodoItems();
       setTodoItems(res);
     }
     waitItems();
@@ -28,7 +32,7 @@ function App() {
   },[todoItems]);
 
   const handleDelete = (item : TodoItemType) => {
-    deleteTodoItem(item);
+    fc.deleteTodoItem(item);
     let newTodos = [...todoItems].filter(
       todo => todo.id !== item.id
     );
@@ -56,7 +60,7 @@ function App() {
 
   return(
 
-      <>
+      <CategoryContext.Provider value={categories}>
         <AddItem close={closeAddItem} handleSetTodos={setTodoItems} todos={todoItems} ref={AddItemRef}/>
         <p>{ROUTES.default.VERSION}</p>
         <div id={styles.main}>
@@ -66,7 +70,7 @@ function App() {
           </div>
           <Tabs items={todoItems} handleDelete={handleDelete}/>
         </div>
-      </>
+      </CategoryContext.Provider>
 
   )
 }

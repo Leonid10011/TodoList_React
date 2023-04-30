@@ -24,6 +24,11 @@ export const reducer = (state: SetTodoItemType, action: TodoItemAction) => {
                 ...state,
                 notes: action.payload,
             });
+        case "SET_CATEGORY":
+            return Object({
+                ...state,
+                category: action.payload,
+            });
         default:
             return state;
     }

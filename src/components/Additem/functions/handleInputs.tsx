@@ -1,21 +1,5 @@
 import React from "react";
-
-type SetTitleAction = {
-    type: "SET_TITLE";
-    payload: string,
-}
-
-type SetDateAction = {
-    type: "SET_DATE";
-    payload: string;
-}
-
-type SetNotesAction = {
-    type: "SET_NOTES";
-    payload: string;
-}
-
-type TodoItemAction = SetTitleAction | SetDateAction | SetNotesAction;
+import { TodoItemAction } from "../types/types";
 /**
  * 
  * @param title 
@@ -61,6 +45,22 @@ export const handleNotes = (
         {
             type: "SET_NOTES",
             payload: notes,
+        }
+    );
+}
+/**
+ * 
+ * @param category 
+ * @param dispatch 
+ */
+export const handleCategory = (
+    category: string,
+    dispatch: React.Dispatch<TodoItemAction>
+) => {
+    dispatch(
+        {
+            type: "SET_CATEGORY",
+            payload: category,
         }
     );
 }

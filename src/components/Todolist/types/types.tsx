@@ -1,3 +1,5 @@
+import { Firestore } from "firebase/firestore";
+
 export type TodoItemType = {
     id: string,
     title: string,

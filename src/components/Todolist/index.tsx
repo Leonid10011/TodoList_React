@@ -1,9 +1,10 @@
-import React, { Ref, forwardRef, useEffect } from "react";
+import React, { Ref, forwardRef } from "react";
 import styles from "./styles/style.module.css";
 import { TodoItemProps, TodoListProps } from "./types/types";
-import { updateTodoItem } from "../../databaseController/controller";
+import { FirebaseContext } from "../Firebase";
+import  FirestoreController  from "../../databaseController/controller";
 
-export const TodoList = forwardRef( function TodoList({ items, handleDelete, _id, category }: TodoListProps, ref: Ref<HTMLDivElement> ) {
+const TodoList = forwardRef( function TodoList({ items, handleDelete, _id, category }: TodoListProps, ref: Ref<HTMLDivElement> ) {
 
     return(
         <div id={_id}>
@@ -30,6 +31,9 @@ export const TodoList = forwardRef( function TodoList({ items, handleDelete, _id
  * @todo add linebreak to long words ( wont linebreak themseleves!)
  */
 const TodoItem = (function TodoItem({ item, handleDelete }: TodoItemProps) {
+    const firebase = React.useContext(FirebaseContext)
+    const fc = new FirestoreController(firebase);
+
     const [checked, setChecked] = React.useState(item.checked);
     // change appearance of TodoItem when checked
     let activeItem = styles.listItem;
@@ -38,7 +42,7 @@ const TodoItem = (function TodoItem({ item, handleDelete }: TodoItemProps) {
     const handleChecked = () => {
         setChecked(!checked);
         // update the check attribute of item in database
-        updateTodoItem({...item, checked: !checked});
+        fc.updateTodoItem({...item, checked: !checked});
     } 
 
     return(
@@ -64,3 +68,5 @@ const TodoItem = (function TodoItem({ item, handleDelete }: TodoItemProps) {
         </li> 
     )
 });
+
+export default TodoList;
