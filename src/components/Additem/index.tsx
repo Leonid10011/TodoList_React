@@ -1,24 +1,21 @@
-import React, { Ref, forwardRef, ComponentType, FC } from "react";
-import { reducer } from "./reducer/reducer";
+import React, { Ref, forwardRef } from "react";
 
 import { InputWithLabelProps, AddItemFormProps } from "./types/types";
 import { TodoItemType } from "../Todolist/types/types";
 
+import { reducer } from "./reducer/reducer";
 import  FirestoreController from "../../databaseController/controller";
-
 import * as handler from "./functions/handleInputs";
-
-import styles from "./styles/index.module.css";
-
-//import { addTodoItem } from "../../databaseController/controller";
 
 import { withInputandLabel } from "./withInputandLablel";
 import { FirebaseContext } from "../Firebase";
-import { Firestore } from "firebase/firestore";
-import { CategoryContext } from "../Categories";
+import Dropdown from "../Dropdown";
 
-const INITIAL_CATEGORIES = ["main","sec"];
+import styles from "./styles/index.module.css";
 
+/**
+ * @description AddItem Component page
+ */
 export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todos } : {
     close: () => void,
     handleSetTodos: React.Dispatch<React.SetStateAction<TodoItemType[]>>,
@@ -27,6 +24,9 @@ export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todo
     ref: Ref<HTMLDivElement>
     ) {
     
+    /**
+     * @description  Initialize for type SetTodoItemType
+     */
     const [itemToAdd, dispatch] = React.useReducer(reducer, {
         title: "",
         date: "",
@@ -44,17 +44,32 @@ export const AddItem = forwardRef(function AddItem({ close, handleSetTodos, todo
                 <span>Create new Task</span>
             </div>
             <div className={styles.addItemBody}>
-                <AddItemForm itemToAdd={itemToAdd} dispatch={dispatch} handleSetTodos={handleSetTodos} todos={todos}/>
+                <AddItemForm 
+                    itemToAdd={itemToAdd}
+                    dispatch={dispatch} 
+                    handleSetTodos={handleSetTodos} 
+                    todos={todos}
+                 />
             </div>
         </div>
     )
 })
 
+/**
+ * 
+ * @param param0 
+ * @returns Form for the Additem Component
+ */
 function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFormProps) {
-    const fire = React.useContext(FirebaseContext);
-    const categories = React.useContext(CategoryContext);
+    
+    const [activeCategory, setActiveCategory] = React.useState("");
     // Create new forestorecontroller to access db methods
-    const fc = new FirestoreController(fire)
+    const firebaseContext = React.useContext(FirebaseContext);
+    const fc = new FirestoreController(firebaseContext);
+
+    React.useEffect(() => {
+        console.log("Rerender");
+    }, [activeCategory]);
 
     const handleOnSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -63,10 +78,8 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
             date: itemToAdd.date,
             notes: itemToAdd.notes,
             checked: itemToAdd.checked,
-            category: itemToAdd.category
+            category: activeCategory
         }
-
-        
 
         // retrieve id to add todo with its new id to State in App component to avoid a fetch for this item  
         const updateTodoItemsState = async () => {
@@ -81,18 +94,14 @@ function AddItemForm ( { itemToAdd, handleSetTodos, dispatch, todos }: AddItemFo
     
     return(
         <form onSubmit={handleOnSubmit} className={styles.addForm}>
-            {categories.map(
-                category => 
-                    <p>{category}</p>
-            )}
-            <Input type={"text"} name={"Category"} id={"0"} value={itemToAdd.category} dispatchItem={dispatch} handleInput={handler.handleCategory}/>
+            <Dropdown handleChange={setActiveCategory}/>
+            <Input type={"text"} name={"Category"} id={"0"} value={activeCategory} dispatchItem={dispatch} handleInput={handler.handleCategory}/>
             <Input  type={"text"} name={"Title"} id={"1"} value={itemToAdd.title} dispatchItem={dispatch} handleInput={handler.handleTitle} />
             <Input  type={"text"} name={"Date"} id={"2"} value={itemToAdd.date} dispatchItem={dispatch} handleInput={handler.handleDate} />
             <TextArea  type={"text"} name={"Notes"} id={"3"} value={itemToAdd.notes} dispatchItem={dispatch} handleInput={handler.handleNotes} />
             <div className={styles.btn_submit}>
-                <button type="submit" >Submit</button>
-            </div>
-            
+                <button type="submit" >Add Category</button>
+            </div> 
         </form>
     )
 }
@@ -135,7 +144,7 @@ const Input = withInputandLabel(
                 value={props.value}
                 onChange={handleOnChange} 
                 maxLength={28}
-            />
+            ></input>
         )
     }
 )

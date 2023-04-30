@@ -1,5 +1,8 @@
 import { TodoItemType } from "../../Todolist/types/types";
 
+/**
+ * @description TodoItem type without ID. Id is retrieved after adding the item to firestore.
+ */
 export type SetTodoItemType = {
     title: string,
     date: string,

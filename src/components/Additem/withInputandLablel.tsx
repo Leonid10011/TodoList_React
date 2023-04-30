@@ -1,6 +1,6 @@
 import React from "react";
 
-import { InputWithLabelProps } from "./types/types";
+import { InputWithLabelProps, TodoItemAction } from "./types/types";
 
 import styles from "./styles/index.module.css";
 
